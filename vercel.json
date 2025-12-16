@@ -1,21 +1,8 @@
 {
-    "version": 2,
-    "builds": [
+    "rewrites": [
         {
-            "src": "index.html",
-            "use": "@vercel/static"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/$1"
-        }
-    ],
-    "crons": [
-        {
-            "path": "/api/keep-alive",
-            "schedule": "0 0 */3 * *"
+            "source": "/(.*)",
+            "destination": "/$1"
         }
     ]
 }
