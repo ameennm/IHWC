@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>IHWC - Integrative Health and Wellness Council</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Integrative Health and Wellness Council - Accredited certification programs in holistic health and wellness" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header>
+        <div class="header-inner">
+            <div class="brand">
+                <img src="logo.svg" alt="IHWC Logo" class="logo-img" onerror="this.style.display='none'" />
+                <div class="brand-text">
+                    <h1>IHWC</h1>
+                    <p>Integrative Health and Wellness Council</p>
+                </div>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <a href="#home"><i class="fas fa-home"></i> Home</a>
+                <a href="#verify"><i class="fas fa-certificate"></i> Verify</a>
+                <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="homePage" class="page active">
+        <section id="home-hero">
+            <div class="slider-container">
+                <div class="slider-wrapper" id="sliderWrapper">
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1920&h=1080&fit=crop"
+                            alt="Wellness" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1920&h=1080&fit=crop"
+                            alt="Healthy Living" />
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1920&h=1080&fit=crop"
+                            alt="Holistic Health" />
+                    </div>
+                </div>
+                <div class="slider-dots" id="sliderDots"></div>
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h2>Empowering Holistic Health & Wellness</h2>
+                <p>Building healthier communities through integrative wellness education, training, and verifiable
+                    certifications</p>
+            </div>
+        </section>
+
+        <section id="verify">
+            <div class="verify-card">
+                <h3><i class="fas fa-shield-alt"></i>Verify Your Certificate</h3>
+                <form id="verifyForm">
+                    <div class="form-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="certInput" placeholder="Enter Certificate Number (e.g., IHWC2025001)"
+                            required />
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-search"></i>
+                        Verify Certificate
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section id="about" class="default-section">
+            <div class="container">
+                <h2 class="section-title">Why Choose IHWC?</h2>
+                <div class="cards-grid">
+                    <article class="card">
+                        <div class="card-icon"><i class="fas fa-award"></i></div>
+                        <h3 class="card-title">Accredited Programs</h3>
+                        <p>IHWC offers nationally recognized certification programs in holistic health, wellness
+                            coaching, and integrative therapies.</p>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                        <h3 class="card-title">Comprehensive Courses</h3>
+                        <p>From foundational wellness principles to advanced integrative medicine, our curriculum covers
+                            all aspects of holistic health.</p>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <h3 class="card-title">Expert Instructors</h3>
+                        <p>Learn from certified wellness professionals, nutritionists, holistic practitioners, and
+                            healthcare experts.</p>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                        <h3 class="card-title">Career Growth</h3>
+                        <p>Our certifications open doors to careers in wellness coaching, health counseling, and
+                            integrative healthcare services.</p>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon"><i class="fas fa-heart"></i></div>
+                        <h3 class="card-title">Community Impact</h3>
+                        <p>Make a difference by promoting preventive health, mindful living, and sustainable wellness
+                            practices.</p>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon"><i class="fas fa-globe"></i></div>
+                        <h3 class="card-title">Global Standards</h3>
+                        <p>Our programs align with international wellness and integrative health standards for global
+                            recognition.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="default-section" style="background: #fff;">
+            <div class="container">
+                <h2 class="section-title">Verification Platform Features</h2>
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Secure Verification</h4>
+                        <p>Each certificate is uniquely registered in IHWC's secure database for instant authenticity
+                            verification.</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-clock"></i>
+                        <h4>Instant Results</h4>
+                        <p>Get immediate verification results with complete certificate details in seconds.</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>Mobile Friendly</h4>
+                        <p>Access from any device - desktop, tablet, or smartphone - for convenient verification
+                            anywhere.</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-database"></i>
+                        <h4>Organized Records</h4>
+                        <p>Centralized storage of student credentials, course completion data, and certification
+                            history.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="adminLoginPage" class="page">
+        <div class="admin-login-container">
+            <div class="login-card">
+                <h2><i class="fas fa-lock"></i> Admin Login</h2>
+                <p>Enter your credentials to access the dashboard</p>
+                <div id="loginAlert" class="alert alert-error"></div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="adminPassword" placeholder="Enter Admin Password" required />
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login to Dashboard
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminDashboardPage" class="page">
+        <div class="admin-container">
+            <div class="container">
+                <div class="admin-header">
+                    <h2 class="section-title" style="margin-bottom:0; text-align:left;">IHWC Admin Dashboard</h2>
+                    <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-green"><i class="fas fa-certificate"></i></div>
+                        <div class="stat-content">
+                            <h4>Total Certificates</h4>
+                            <p id="statTotalCerts">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-light-green"><i class="fas fa-users"></i></div>
+                        <div class="stat-content">
+                            <h4>Total Students</h4>
+                            <p id="statTotalStudents">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-orange"><i class="fas fa-building"></i></div>
+                        <div class="stat-content">
+                            <h4>Institutions</h4>
+                            <p id="statInstitutions">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon stat-teal"><i class="fas fa-chart-line"></i></div>
+                        <div class="stat-content">
+                            <h4>This Month</h4>
+                            <p id="statThisMonth">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 id="formTitle"><i class="fas fa-plus-circle"></i> Add New Certificate</h3>
+                    </div>
+                    <div id="formAlert" class="alert"></div>
+                    <form id="certForm">
+                        <input type="hidden" id="editMode" value="false" />
+                        <input type="hidden" id="editId" value="" />
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="certNumber">Certificate Number *</label>
+                                <input type="text" id="certNumber" placeholder="IHWC2025006" required />
+                            </div>
+                            <div class="admin-form-group">
+                                <label for="studentName">Student Name *</label>
+                                <input type="text" id="studentName" placeholder="Student full name" required />
+                            </div>
+                        </div>
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="courseName">Course *</label>
+                                <input type="text" id="courseName" placeholder="Course title" required />
+                            </div>
+                            <div class="admin-form-group">
+                                <label for="duration">Duration *</label>
+                                <select id="duration" required>
+                                    <option value="">Select duration</option>
+                                    <option>1 Month</option>
+                                    <option>3 Months</option>
+                                    <option>6 Months</option>
+                                    <option>9 Months</option>
+                                    <option>12 Months</option>
+                                    <option>18 Months</option>
+                                    <option>24 Months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="admin-form-row">
+                            <div class="admin-form-group">
+                                <label for="institutionName">Institution Name *</label>
+                                <input type="text" id="institutionName" placeholder="IHWC Training Center, City"
+                                    required />
+                            </div>
+                            <div class="admin-form-group">
+                                <label for="issueDate">Issue Date *</label>
+                                <input type="date" id="issueDate" required />
+                            </div>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="button" class="btn-outline" id="btnClearForm"><i class="fas fa-times"></i>
+                                Clear</button>
+                            <button type="submit" class="btn-primary-small" id="btnSubmitForm"><i
+                                    class="fas fa-save"></i> Save Certificate</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3><i class="fas fa-users"></i> All Students</h3>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by certificate, name, or course..." />
+                    </div>
+                    <div class="table-wrapper" id="tableWrapper">
+                        <p style="text-align:center; padding: 2rem; color: #666;">Loading certificates...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="verifyModal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <i class="fas fa-check-circle" id="modalIcon"></i>
+                <h3 id="modalTitle">Certificate Verified</h3>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 IHWC – Integrative Health and Wellness Council</p>
+        <p>Empowering individuals through holistic health education and wellness certification.</p>
+        <br>
+        <a href="#adminpage"><i class="fas fa-lock"></i> Admin Login</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
