@@ -45,9 +45,9 @@ function validateCertificateNumber(certNo) {
     throw new AppError('Certificate number is too long (max 50 characters)', 'validation');
   }
 
-  // Allow alphanumeric and hyphens
-  if (!/^[A-Z0-9-]+$/i.test(trimmed)) {
-    throw new AppError('Certificate number can only contain letters, numbers, and hyphens', 'validation');
+  // Allow alphanumeric, hyphens, and forward slashes
+  if (!/^[A-Z0-9\-\/]+$/i.test(trimmed)) {
+    throw new AppError('Certificate number can only contain letters, numbers, hyphens, and slashes', 'validation');
   }
 
   return trimmed.toUpperCase();
