@@ -112,29 +112,67 @@ function validateFormData(data) {
   return true;
 }
 
-// Initialize Appwrite client with error handling
-let client, databases;
-try {
-  if (!window.Appwrite) {
-    throw new AppError('Appwrite library not loaded. Please check your internet connection.', 'initialization');
+async function initAppwrite() {
+  if (window.Appwrite) {
+    return window.Appwrite;
   }
 
-  client = new window.Appwrite.Client()
-    .setEndpoint(APPWRITE_ENDPOINT)
-    .setProject(APPWRITE_PROJECT_ID);
+  const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+      console.log(`Attempting to load Appwrite from ${src}...`);
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        if (window.Appwrite) {
+          console.log('✓ Appwrite script loaded successfully');
+          resolve(window.Appwrite);
+        } else {
+          reject(new Error('Appwrite script loaded but window.Appwrite is undefined'));
+        }
+      };
+      script.onerror = () => reject(new Error(`Failed to load script from ${src}`));
+      document.head.appendChild(script);
+    });
+  };
 
-  databases = new window.Appwrite.Databases(client);
-  console.log('✓ Appwrite initialized');
-
-  // Verify setup with a ping
-  client.ping()
-    .then(() => console.log('✓ Appwrite Ping: Connection successful'))
-    .catch((e) => console.warn('⚠️ Appwrite Ping Failed:', e));
-
-} catch (error) {
-  logError(error, 'Appwrite Initialization');
-  showGlobalError('Failed to initialize database connection. Please refresh the page.');
+  try {
+    // Try primary CDN with explicit IIFE path
+    return await loadScript('https://cdn.jsdelivr.net/npm/appwrite@16.0.2/dist/iife/sdk.js');
+  } catch (e1) {
+    console.warn('Primary CDN failed, trying fallback...');
+    try {
+      // Try fallback CDN with explicit IIFE path
+      return await loadScript('https://unpkg.com/appwrite@16.0.2/dist/iife/sdk.js');
+    } catch (e2) {
+      throw new Error('Failed to load Appwrite library from all sources. Please check your connection.');
+    }
+  }
 }
+
+async function initializeDatabase() {
+  try {
+    const Appwrite = await initAppwrite();
+
+    client = new Appwrite.Client()
+      .setEndpoint(APPWRITE_ENDPOINT)
+      .setProject(APPWRITE_PROJECT_ID);
+
+    databases = new Appwrite.Databases(client);
+    console.log('✓ Appwrite initialized');
+
+    // Verify setup with a ping
+    client.ping()
+      .then(() => console.log('✓ Appwrite Ping: Connection successful'))
+      .catch((e) => console.warn('⚠️ Appwrite Ping Failed:', e));
+
+  } catch (error) {
+    logError(error, 'Appwrite Initialization');
+    showGlobalError('Failed to connect to database. Please check your internet connection and refresh the page.');
+  }
+}
+
+// Start initialization immediately
+initializeDatabase();
 
 function showGlobalError(message) {
   const errorDiv = document.createElement('div');
