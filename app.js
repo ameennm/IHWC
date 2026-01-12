@@ -126,6 +126,11 @@ try {
   databases = new window.Appwrite.Databases(client);
   console.log('✓ Appwrite initialized');
 
+  // Verify setup with a ping
+  client.ping()
+    .then(() => console.log('✓ Appwrite Ping: Connection successful'))
+    .catch((e) => console.warn('⚠️ Appwrite Ping Failed:', e));
+
 } catch (error) {
   logError(error, 'Appwrite Initialization');
   showGlobalError('Failed to initialize database connection. Please refresh the page.');
