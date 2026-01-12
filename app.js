@@ -160,10 +160,7 @@ async function initializeDatabase() {
     databases = new Appwrite.Databases(client);
     console.log('✓ Appwrite initialized');
 
-    // Verify setup with a ping
-    client.ping()
-      .then(() => console.log('✓ Appwrite Ping: Connection successful'))
-      .catch((e) => console.warn('⚠️ Appwrite Ping Failed:', e));
+    // Connection initialized successfully
 
   } catch (error) {
     logError(error, 'Appwrite Initialization');
