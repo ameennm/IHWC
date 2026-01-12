@@ -25,3 +25,8 @@ Thumbs.db
 # Logs
 logs/
 *.log
+
+# Scripts
+setup-appwrite.js
+import-data.js
+fix-data.js

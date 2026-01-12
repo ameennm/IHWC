@@ -1,8 +1,9 @@
 // Supabase Configuration
-// IMPORTANT: You need to get the ANON KEY (not publishable key) from Supabase
-// Go to: Supabase Dashboard → Settings → API → Copy "anon public" key
-const SUPABASE_URL = 'https://zeutkwqvzdymqwezprjn.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_Pgfx88tR5WZjQosrIzA_cw_ovMEx254'; // This should be a long JWT token starting with 'eyJ...'
+// Appwrite Configuration
+const APPWRITE_PROJECT_ID = '6964de76000ced6216b4';
+const APPWRITE_ENDPOINT = 'https://sgp.cloud.appwrite.io/v1';
+const APPWRITE_DB_ID = 'ihwc_db'; // You must create this Database in Appwrite
+const APPWRITE_COLLECTION_ID = 'certificates'; // You must create this Collection in Appwrite
 
 // Admin password - Change this in production!
 const ADMIN_PASSWORD = "IHWCF0928cbbee#";
@@ -111,25 +112,22 @@ function validateFormData(data) {
   return true;
 }
 
-// Initialize Supabase client with error handling
-let supabaseClient;
+// Initialize Appwrite client with error handling
+let client, databases;
 try {
-  if (!window.supabase) {
-    throw new AppError('Supabase library not loaded. Please check your internet connection.', 'initialization');
+  if (!window.Appwrite) {
+    throw new AppError('Appwrite library not loaded. Please check your internet connection.', 'initialization');
   }
 
-  if (!SUPABASE_URL || SUPABASE_URL === 'YOUR_URL_HERE') {
-    throw new AppError('Supabase URL not configured. Please update app.js with your Supabase URL.', 'configuration');
-  }
+  client = new window.Appwrite.Client()
+    .setEndpoint(APPWRITE_ENDPOINT)
+    .setProject(APPWRITE_PROJECT_ID);
 
-  if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === 'YOUR_ANON_KEY_HERE') {
-    console.warn('⚠️ Supabase ANON KEY not configured. Database features will not work.');
-    console.warn('Please update app.js with your Supabase anon key from: Dashboard → Settings → API');
-  }
+  databases = new window.Appwrite.Databases(client);
+  console.log('✓ Appwrite initialized');
 
-  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 } catch (error) {
-  logError(error, 'Supabase Initialization');
+  logError(error, 'Appwrite Initialization');
   showGlobalError('Failed to initialize database connection. Please refresh the page.');
 }
 
@@ -507,27 +505,22 @@ if (verifyForm) {
 
       setButtonLoading(submitBtn, true);
 
-      if (!supabaseClient) {
+      if (!databases) {
         throw new AppError('Database connection not available. Please refresh the page.', 'connection');
       }
 
-      const { data, error } = await supabaseClient
-        .from('certificates')
-        .select('*')
-        .eq('cert_number', certNo)
-        .single();
+      const response = await databases.listDocuments(
+        APPWRITE_DB_ID,
+        APPWRITE_COLLECTION_ID,
+        [
+          window.Appwrite.Query.equal('cert_number', certNo)
+        ]
+      );
 
-      if (error) {
-        if (error.code === 'PGRST116') {
-          openModalError(`Certificate "${certNo}" not found in our records. Please check the certificate number and try again.`);
-        } else if (error.message.includes('JWT')) {
-          openModalError('Database authentication error. Please contact support.');
-          logError(error, 'Certificate Verification - Auth Error');
-        } else {
-          throw new AppError('Database error occurred while verifying certificate', 'database', error);
-        }
-      } else if (data) {
-        openModalVerified(certNo, data);
+      if (response.total === 0) {
+        openModalError(`Certificate "${certNo}" not found in our records. Please check the certificate number and try again.`);
+      } else {
+        openModalVerified(certNo, response.documents[0]);
       }
     } catch (error) {
       logError(error, 'Certificate Verification');
@@ -565,20 +558,19 @@ async function fetchCertificates() {
   showLoading('tableWrapper', 'Loading certificates...');
 
   try {
-    if (!supabaseClient) {
+    if (!databases) {
       throw new AppError('Database connection not available', 'connection');
     }
 
-    const { data, error, count } = await supabaseClient
-      .from('certificates')
-      .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false });
+    const response = await databases.listDocuments(
+      APPWRITE_DB_ID,
+      APPWRITE_COLLECTION_ID,
+      [
+        window.Appwrite.Query.orderDesc('$createdAt')
+      ]
+    );
 
-    if (error) {
-      throw new AppError('Failed to fetch certificates from database', 'database', error);
-    }
-
-    allCertificates = data || [];
+    allCertificates = response.documents || [];
     updateStats();
     renderTable(allCertificates);
 
@@ -743,18 +735,21 @@ async function deleteCert(certNo) {
   }
 
   try {
-    if (!supabaseClient) {
+    if (!databases) {
       throw new AppError('Database connection not available', 'connection');
     }
 
-    const { error } = await supabaseClient
-      .from('certificates')
-      .delete()
-      .eq('cert_number', certNo);
-
-    if (error) {
-      throw new AppError(`Failed to delete certificate: ${error.message}`, 'database', error);
+    // First find the document ID
+    const cert = allCertificates.find(c => c.cert_number === certNo);
+    if (!cert || !cert.$id) {
+      throw new AppError('Certificate document ID not found', 'database');
     }
+
+    await databases.deleteDocument(
+      APPWRITE_DB_ID,
+      APPWRITE_COLLECTION_ID,
+      cert.$id
+    );
 
     showFormAlert(`Certificate "${certNo}" deleted successfully.`, "success");
     await fetchCertificates();
@@ -836,35 +831,45 @@ if (certForm) {
       // Validate form data
       validateFormData(payload);
 
-      if (!supabase) {
+      if (!databases) {
         throw new AppError('Database connection not available', 'connection');
       }
 
       setButtonLoading(submitBtn, true);
 
       if (editMode) {
-        const { error } = await supabase
-          .from('certificates')
-          .update(payload)
-          .eq('cert_number', document.getElementById("editId").value);
+        // Find existing doc ID logic
+        const editCertNumber = document.getElementById("editId").value; // This is the cert number from the form
+        const existingCert = allCertificates.find(c => c.cert_number === editCertNumber);
 
-        if (error) {
-          throw new AppError(`Failed to update certificate: ${error.message}`, 'database', error);
+        if (!existingCert || !existingCert.$id) {
+          throw new AppError('Could not find original certificate to update', 'validation');
         }
+
+        await databases.updateDocument(
+          APPWRITE_DB_ID,
+          APPWRITE_COLLECTION_ID,
+          existingCert.$id,
+          payload
+        );
 
         showFormAlert("✓ Certificate updated successfully!", "success");
       } else {
-        const { error } = await supabase
-          .from('certificates')
-          .insert([payload]);
+        // Check for duplicates first (Appwrite doesn't have unique index enforcement by default on attributes easily accessible)
+        const check = await databases.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
+          window.Appwrite.Query.equal('cert_number', certNumber)
+        ]);
 
-        if (error) {
-          if (error.code === '23505') {
-            throw new AppError(`Certificate number "${certNumber}" already exists. Please use a different number.`, 'validation');
-          } else {
-            throw new AppError(`Failed to add certificate: ${error.message}`, 'database', error);
-          }
+        if (check.total > 0) {
+          throw new AppError(`Certificate number "${certNumber}" already exists.`, 'validation');
         }
+
+        await databases.createDocument(
+          APPWRITE_DB_ID,
+          APPWRITE_COLLECTION_ID,
+          window.Appwrite.ID.unique(),
+          payload
+        );
 
         showFormAlert("✓ Certificate added successfully!", "success");
       }
@@ -928,10 +933,9 @@ if (btnClearForm) {
     console.log('✓ IHWC Certificate System initialized successfully');
     console.log('ℹ️ Admin password:', ADMIN_PASSWORD);
 
-    if (SUPABASE_ANON_KEY === 'YOUR_ANON_KEY_HERE') {
-      console.warn('⚠️ WARNING: Supabase is not configured!');
-      console.warn('Please update SUPABASE_ANON_KEY in app.js');
-      console.warn('Get your key from: Supabase Dashboard → Settings → API → anon public key');
+    if (APPWRITE_DB_ID === 'YOUR_DB_ID' || APPWRITE_COLLECTION_ID === 'YOUR_COLLECTION_ID') {
+      console.warn('⚠️ WARNING: Appwrite DB/Collection IDs are not set!');
+      console.warn('Please create a Database and Collection in your Appwrite console and update the IDs in app.js');
     }
   } catch (error) {
     logError(error, 'Initialization');
