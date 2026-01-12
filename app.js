@@ -112,7 +112,7 @@ function validateFormData(data) {
 }
 
 // Initialize Supabase client with error handling
-let supabase;
+let supabaseClient;
 try {
   if (!window.supabase) {
     throw new AppError('Supabase library not loaded. Please check your internet connection.', 'initialization');
@@ -127,7 +127,7 @@ try {
     console.warn('Please update app.js with your Supabase anon key from: Dashboard → Settings → API');
   }
 
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 } catch (error) {
   logError(error, 'Supabase Initialization');
   showGlobalError('Failed to initialize database connection. Please refresh the page.');
@@ -507,11 +507,11 @@ if (verifyForm) {
 
       setButtonLoading(submitBtn, true);
 
-      if (!supabase) {
+      if (!supabaseClient) {
         throw new AppError('Database connection not available. Please refresh the page.', 'connection');
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('certificates')
         .select('*')
         .eq('cert_number', certNo)
@@ -565,11 +565,11 @@ async function fetchCertificates() {
   showLoading('tableWrapper', 'Loading certificates...');
 
   try {
-    if (!supabase) {
+    if (!supabaseClient) {
       throw new AppError('Database connection not available', 'connection');
     }
 
-    const { data, error, count } = await supabase
+    const { data, error, count } = await supabaseClient
       .from('certificates')
       .select('*', { count: 'exact' })
       .order('created_at', { ascending: false });
@@ -743,11 +743,11 @@ async function deleteCert(certNo) {
   }
 
   try {
-    if (!supabase) {
+    if (!supabaseClient) {
       throw new AppError('Database connection not available', 'connection');
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseClient
       .from('certificates')
       .delete()
       .eq('cert_number', certNo);
