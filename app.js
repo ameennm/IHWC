@@ -982,6 +982,27 @@ if (btnClearForm) {
   }
 })();
 
+// ========== CONTACT POPUP ==========
+const contactBtn = document.getElementById('contactBtn');
+const contactPopup = document.getElementById('contactPopup');
+
+if (contactBtn && contactPopup) {
+  contactBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    contactPopup.classList.toggle('show');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!contactBtn.contains(e.target) && !contactPopup.contains(e.target)) {
+      contactPopup.classList.remove('show');
+    }
+  });
+
+  contactPopup.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+}
+
 // Global error handler
 window.addEventListener('error', (event) => {
   logError(event.error, 'Global Error Handler');

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ameennm/IHWC#readme",
   "dependencies": {
-    "node-appwrite": "^21.1.0"
+    "node-appwrite": "^21.1.0",
+    "pdfkit": "^0.17.2"
   }
 }
